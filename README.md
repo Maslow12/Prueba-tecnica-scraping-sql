@@ -4,7 +4,9 @@
 📋 Requisitos Previos
 Python 3.13 instalado (Descargar Python: https://www.python.org/downloads/release/python-3133/)
 
-🔧 Pasos para Instalar el Script
+🔧 Pasos para Instalar el Script:
+
+
 1️⃣ Clonar el Repositorio (Opcional)
 
 
@@ -54,7 +56,7 @@ tzdata==2025.2
 urllib3==2.4.0
 ```
 
-* __BeautifulSoup:__ Se optó por utilizar BeautifulSoup (BS4) para el scraping debido a que el proyecto requería un alcance limitado y una implementación sencilla. No obstante, para proyectos más complejos o de mayor escala, Scrapy sería la opción recomendada, ya que ofrece una infraestructura robusta con funcionalidades avanzadas como manejo de peticiones concurrentes, pipelines integrados y soporte para crawling automatizado, lo que lo hace ideal para tareas extensas o que demandan mayor eficiencia. 
+* __BeautifulSoup:__ Se optó por utilizar BeautifulSoup (BS4) para el scraping debido a la prueba no requiere un alcance complejo. No obstante, para proyectos más complejos o de mayor escala, Scrapy sería la opción recomendada, ya que ofrece una infraestructura robusta con funcionalidades avanzadas como manejo de peticiones concurrentes, pipelines integrados y soporte para crawling automatizado.
   
 * __FreeProxy:__ Esta libreria no es recomendada para entornos productivos, ya que es mejor utilizar opciones pagas para obtener proxies. Su función principal es extraer proxies activos de sitios como sslproxies.org, us-proxy.org y free-proxy-list.net, verificando su disponibilidad para implementar un sistema de proxies rotativos. Dado que IMDB emplea Cloudflare para bloquear bots, y al no poder usar herramientas como Selenium o Playwright en este ejercicio, se optó por requests con proxies para evitar el bloqueo y extraer el HTML. Sin embargo, esta solución presenta limitaciones de rendimiento, las cuales se optimizaron mediante programación concurrente, combinando ThreadPoolExecutor para I/O y multiprocessing.Pool.
 
@@ -67,7 +69,7 @@ urllib3==2.4.0
   
 * Para estandarizar el formato de duración de las películas (que originalmente aparecía en horas y minutos), se implementó la función ```time_to_minutes(time_str:str)->int```, la cual convierte este dato a una representación numérica en minutos.
 
-* Como se mencionó previamente, para optimizar el rendimiento del script se implementó programación concurrente mediante dos enfoques complementarios: ThreadPoolExecutor para operaciones de I/O (entrada/salida) y multiprocessing.Pool para procesamiento paralelo. Específicamente, ThreadPoolExecutor se empleó para extraer de manera eficiente la información individual de cada película mediante múltiples solicitudes web simultáneas, mientras que multiprocessing.Pool permitió ejecutar en paralelo ambos filtros (ascendente y descendente) para obtener los datos de las páginas de forma concurrente, maximizando así la eficiencia del proceso de scraping.
+* Como se mencionó previamente, para optimizar el rendimiento del script se implementó programación concurrente.Específicamente, ThreadPoolExecutor se empleó para extraer de manera eficiente la información individual de cada película mediante múltiples solicitudes web simultáneas, mientras que multiprocessing.Pool permitió ejecutar en paralelo ambos filtros (ascendente ```?sort=rank%2Cdesc```y descendente ```?sort=rank%2Casc```) para obtener los datos de las páginas de forma concurrente, maximizando así la eficiencia del proceso de scraping.
 
 # Preguntas adicionales:
 
@@ -116,7 +118,7 @@ o implícitas) para evitar bloqueos y errores.
 estas tecnologías (por ejemplo, bloquear IP, captchas, JavaScript cargado
 dinámicamente).
 
-✅ Para manejar los bloqueos de IP, Proxies rotativos (SmartProxy) o Plataformas pagas proveedoras de proxies, librerias como ```random_user_agent```
+✅ Para manejar los bloqueos de IP, Proxies rotativos (SmartProxy) o Plataformas pagas proveedoras de proxies, librerias como ```random_user_agent``` para obtener distintos user agents
 
 ✅ Usar presolved Captcha, o librerias como TwoCaptcha (Paga)
 

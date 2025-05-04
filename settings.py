@@ -17,4 +17,4 @@ class ScraperSettings(object):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
     }
     max_workers:int = min(10, (os.cpu_count() or 1) * 2)
-    tries:int = 10
+    tries:int = 15

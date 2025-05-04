@@ -1,10 +1,11 @@
-from multiprocessing import Pool
 import os
 import random
 import time
+import urllib3
 
 import requests
 
+from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from logger_ import logger
@@ -12,6 +13,8 @@ from utils import execute_sql_query, get_fresh_proxies, json_to_excel, json_to_s
 from bs4 import BeautifulSoup
 
 from settings import ScraperSettings
+
+urllib3.disable_warnings()
 
 settings = ScraperSettings()
 
@@ -21,7 +24,7 @@ def fetch_data(url:str, tries:int)->str:
     for i in range(tries):
         proxy = get_fresh_proxies()
         proxy = proxy if proxy else get_fresh_proxies()
-        logger.debug(
+        logger.info(
             "Try with the proxy {0}. Proxy number {1}".format(str(proxy), i)
         )
         try:
@@ -34,15 +37,13 @@ def fetch_data(url:str, tries:int)->str:
                 verify=False
             )
             if response.status_code == 200 and response.text != "" and "script" in response.text:
-                logger.debug(
-                    "Page {0} extracted with the try {1} and proxy {2}".format(url, i, str(proxy))
-                )
+                #logger.debug(
+                #    "Page {0} extracted with the try {1} and proxy {2}".format(url, i, str(proxy))
+                #)
                 return response.text
             time.sleep(random.uniform(1, 3))
         except Exception as e:
-            logger.error(
-                str(e),
-            )
+            pass
     return None
 
 def find_in_single_page(url: str, prefix: str, tries:int=10) -> dict:
@@ -73,7 +74,7 @@ def find_in_single_page(url: str, prefix: str, tries:int=10) -> dict:
                 "metascore": "Not find metascore"
             }
     logger.error(
-        "Not information for the page, set more tries {0}".format(url)
+        "Not information for the page, set more tries {0}".format(page_url)
     )
     return {
         "cast": "Not find cast",
@@ -115,7 +116,7 @@ def find_information(element:any)->dict:
         "div", class_="ipc-metadata-list-summary-item__c").find("div")
     prefix = element_div.find(
         "a", class_="ipc-title-link-wrapper")["href"]
-    extra_data = find_in_single_page(url=single_movie_page, prefix=prefix, tries=10)
+    extra_data = find_in_single_page(url=single_movie_page, prefix=prefix, tries=settings.tries)
     duration = time_to_minutes(element_div.find_all(
         "span", class_="cli-title-metadata-item")[1].text)
     movie_data = {
@@ -147,10 +148,10 @@ def scrape_imdb_concurrent(prefix: str, tries: int) -> dict:
                 try:
                     data = future.result()
                     if data:
-                        logger.debug(f"Successfully fetched {i}")
+                        logger.info(f"Successfully fetched {i}")
                         json_data.append(data)
                 except Exception as e:
-                    print(f"{i} generated an exception: {e}")
+                    pass
         return json_data
     logger.error(
         "Not information for the page, set more tries {0}".format(url)

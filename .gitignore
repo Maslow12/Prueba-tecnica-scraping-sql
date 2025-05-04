@@ -104,12 +104,14 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.html
+*.db
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
-.html
+
 old/
 example_templates/
 # Spyder project settings

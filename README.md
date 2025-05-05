@@ -62,6 +62,8 @@ urllib3==2.4.0
 
 * __Pandas:__ Es la libreria que facilita exportar los datos desde un ```dict``` a un archivo .xslx
 
+* __Sqlite3:__: Base de datos utilizada
+
 
 ### Notas:
 
@@ -123,3 +125,9 @@ dinámicamente).
 ✅ Usar presolved Captcha, o librerias como TwoCaptcha (Paga)
 
 ✅ Utilizar Explicit Waits
+
+
+# IMPORTANTE
+
+* En la carpeta ```results``` estan los excel con los datos obtenidos de la DB ya cargada
+* El nombre de la db es result.db esta en SQLite3
